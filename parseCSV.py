@@ -1,34 +1,23 @@
-
 import csv
 
 
 class ParseCSV:
     def __init__(self, file_name):
-        self.file_reader = ''
+        self._df = pd.DataFrame()
         print('Opening {} for reading'.format(file_name))
         self.csv_file = open(file_name, mode='r')
         self.movies_information = []
 
     def create_file_reader(self):
-        self.file_reader = csv.reader(self.csv_file, delimiter=',')
+        self._df = pd.read_csv(self.csv_file)
 
-    def store_information(self):
-        row_num = 0
-        column_names = []
-        for row in self.file_reader:
-            movie_dict = {}
-            if row_num == 0:
-                [column_names.append(row[index]) for index in range(len(row))]
-                row_num += 1
-            else:
-                for i in range(len(row)):
-                    movie_dict[column_names[i]] = row[i]
-                self.movies_information.append(movie_dict)
+    def replace_null_values(self):
+        self._df = self._df.replace(r'\\N', 0, regex=True)
+        self._df['genres'] = self._df['genres'].replace(0, ' ')
 
-    def print_information(self):
-        for _dict in self.movies_information:
-            for key, value in _dict.items():
-                print(len(key), ' : ', value)
+    def set_correct_data_types(self):
+        self.replace_null_values()
+        self._df["runtimeMinutes"] = pd.to_numeric(self._df['runtimeMinutes'])
 
     def close_file(self):
         self.csv_file.close()
