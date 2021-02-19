@@ -1,6 +1,7 @@
-from parseCSV import ParseCSV
 import operator
 from statistics import mean
+
+from parseCSV import ParseCSV
 
 result_dictionary = {}
 EMOJI = '\U0001F600'
@@ -12,13 +13,15 @@ class Calculations(ParseCSV):
         self._args = _args
 
     def movie_with_year(self, year):
-        movie_with_year_data = [(dic['originalTitle'], dic['rating']) for dic in self.movies_information
-                                if dic['startYear'] == str(year)]
+        movie_with_year_data = [(movie_with_year_data['originalTitle'], movie_with_year_data['rating'])
+                                for movie_with_year_data in self.movies_information
+                                if movie_with_year_data['startYear'] == str(year)]
         return movie_with_year_data
 
     def movie_with_genre(self, genre):
-        movie_with_year_data = [(dic['originalTitle'], dic['rating']) for dic in self.movies_information
-                                if genre in dic['genres']]
+        movie_with_year_data = [(movie_with_year_data['originalTitle'], movie_with_year_data['rating'])
+                                for movie_with_year_data in self.movies_information
+                                if genre in movie_with_year_data['genres']]
         return movie_with_year_data
 
     def movie_with_max_rating(self, year):
@@ -30,13 +33,15 @@ class Calculations(ParseCSV):
         return movie_with_year_data[0]
 
     def movie_with_avg_runtime(self, year):
-        movie_with_year_data = [(dic['originalTitle'], dic['runtimeMinutes']) for dic in self.movies_information
-                                if dic['startYear'] == str(year)]
+        movie_with_year_data = [(movie_with_year_data['originalTitle'], movie_with_year_data['runtimeMinutes'])
+                                for movie_with_year_data in self.movies_information
+                                if movie_with_year_data['startYear'] == str(year)]
         return mean([_tuple[1] for _tuple in movie_with_year_data])
 
     def top_n_highest_rated(self, year):
-        movie_with_year_data = [(dic['originalTitle'], dic['numVotes']) for dic in self.movies_information
-                                if dic['startYear'] == str(year)]
+        movie_with_year_data = [(movie_with_year_data['originalTitle'], movie_with_year_data['numVotes'])
+                                for movie_with_year_data in self.movies_information
+                                if movie_with_year_data['startYear'] == str(year)]
         movie_with_year_data.sort(key=operator.itemgetter(1))
         return movie_with_year_data[::-1][:10]
 
@@ -44,24 +49,30 @@ class Calculations(ParseCSV):
         movies_with_genre_data = self.movie_with_genre(genre)
         return len(movies_with_genre_data), mean([_tuple[1] for _tuple in movies_with_genre_data])
 
-    def store_calculations_results(self):
+    def store_results_of_first_argument(self):
         if self._args.year is not None:
             year_rating = {}
             result = self.movie_with_max_rating(self._args.year)
             year_rating['Highest Rated Movie'] = result[0]
             year_rating['Highest Rating'] = result[1]
+
             result = self.movie_with_min_rating(self._args.year)
             year_rating['Lowest Rated Movie'] = result[0]
             year_rating['Lowest Rating'] = result[1]
+
             result = self.movie_with_avg_runtime(self._args.year)
             year_rating['Average mean minutes'] = "{:.2f}".format(result)
             result_dictionary['-r'] = year_rating
+
+    def store_results_of_second_argument(self):
         if self._args.genre is not None:
             genre_rating = {}
             movies_found, result = self.movie_with_genre_avg_rating(self._args.genre)
             genre_rating['Movies Found'] = movies_found
             genre_rating['Average mean Rating'] = "{:.2f}".format(result)
             result_dictionary['-g'] = genre_rating
+
+    def store_results_of_third_argument(self):
         if self._args.year_rating is not None:
             top_ratings = {}
             result = self.top_n_highest_rated(self._args.year_rating)
