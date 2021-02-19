@@ -1,7 +1,7 @@
-import os
-import timeit
-import json
 import argparse
+import json
+import os
+
 from calculations import *
 
 
@@ -18,13 +18,17 @@ def argument_parser():
 
 
 if __name__ == '__main__':
-    start = timeit.timeit()
     args = argument_parser()
+
     csv_reading = Calculations(os.environ['CSV_FILE'], args)
+
     csv_reading.create_file_reader()
     csv_reading.store_information()
-    csv_reading.store_calculations_results()
+
+    csv_reading.store_results_of_first_argument()
+    csv_reading.store_results_of_second_argument()
+    csv_reading.store_results_of_third_argument()
+
     print(json.dumps(result_dictionary, indent=4, ensure_ascii=False))
+
     csv_reading.close_file()
-    end = timeit.timeit()
-    print(start - end)
