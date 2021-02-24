@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
+    crossorigin="anonymous">
+    <title>Demo Registration</title>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg  navbar-light bg-light fixed-top scrolling-navbar">
+                <div class="container" >
+                      <a class="navbar-brand" href="{% url 'index' %}" style="color:#ff5722;" >Home</a>
+                      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav"
+                           aria-controls="basicExampleNav" aria-expanded="false" aria-label="Toggle navigation">
+                           <span class="navbar-toggler-icon"></span>
+                       </button>
+                      <div class="collapse navbar-collapse" id="basicExampleNav" >
+                        <ul class=" navbar-nav  mr-auto smooth-scroll " >
+                                {% if user.is_authenticated %}
+                                    <li class="nav-item  ">
+                                     <a class="nav-link" href="{% url 'learning_material:course_list' %}">Courses</a>
+                                    </li>
+                                    <li class="nav-item  ">
+                                     <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                                    </li>
+                                {% else %}
+                                    <li class="nav-item ">
+                                        <a class="nav-link" href="{% url 'login_request' %}">Login</a>
+                                    </li>
+                                    <li class="nav-item " >
+                                       <a class="nav-link" href="{% url 'register' %}">Register</span> </a>
+                                    </li>
+                                {% endif %}
+                                <li class="nav-item">
+                                   <a class="nav-link">Contact Us</a>
+                                </li>
+                        </ul>
+                      </div>
+                </div>
+              </nav>
+    {% block body %}
+    {% endblock %}
+</body>
+</html>
