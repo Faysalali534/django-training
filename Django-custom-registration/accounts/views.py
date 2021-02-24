@@ -2,9 +2,9 @@ from django.contrib.auth import login, logout, authenticate
 from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.views.generic import CreateView
-from .form import StudentSignUpForm, ProfessorSignUpForm
+from .form import UserForm, UserInfoForm
 from django.contrib.auth.forms import AuthenticationForm
-from .models import User
+from .models import User, UserInfo
 
 
 def register(request):
@@ -15,26 +15,57 @@ def index_page(request):
     return render(request, 'accounts/index.html', {})
 
 
-class student_register(CreateView):
-    model = User
-    form_class = StudentSignUpForm
-    template_name = 'accounts/register.html'
+def register(request):
+    registered = False
 
-    def form_valid(self, form):
-        user = form.save()
-        login(self.request, user)
-        return redirect('/')
+    if request.method == "POST":
+        user_form = UserForm(data=request.POST)
+        profile_form = UserInfoForm(data=request.POST)
+
+        if user_form.is_valid() and profile_form.is_valid():
+            user = user_form.save()
+            # user.set_password(user.password)
+            user.save()
+
+            profile = profile_form.save(commit=False)
+            profile.user = user
+            profile.save()
+
+            registered = True
+        else:
+            print(user_form.errors, profile_form.errors)
+    else:
+        user_form = UserForm
+        profile_form = UserInfoForm
+
+    return render(request, 'accounts/register.html',
+                  {'registered': registered,
+                   'user_form': user_form,
+                   'profile_form': profile_form})
 
 
-class professor_register(CreateView):
-    model = User
-    form_class = ProfessorSignUpForm
-    template_name = 'accounts/register.html'
+# class student_register(CreateView):
+#     model = User
+#     form_class = StudentSignUpForm
+#     template_name = 'accounts/register.html'
+#
+#     def form_valid(self, form):
+#         user = form.save()
+#         login(self.request, user)
+#         return redirect('/')
+#
+#
+# class professor_register(CreateView):
+#     model = User
+#     form_class = ProfessorSignUpForm
+#     template_name = 'accounts/register.html'
+#
+#     def form_valid(self, form):
+#         user = form.save()
+#         login(self.request, user)
+#         return redirect('/')
 
-    def form_valid(self, form):
-        user = form.save()
-        login(self.request, user)
-        return redirect('/')
+
 # class employee_register(CreateView):
 #     model = User
 #     form_class = EmployeeSignUpForm

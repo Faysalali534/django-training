@@ -1,0 +1,16 @@
+{% extends 'learning_material/base.html' %}
+
+{% block body %}
+<ul>
+{% for course in courses %}
+    <ul>
+        <strong>{{ course }}</strong>
+        {% for lesson in course.lessons.all %}
+        <li>
+            {{ lesson.name }} - Created_by {{ lesson.created_by }}
+        </li>
+        {% endfor %}
+    </ul>
+</ul>
+{% endfor %}
+{% endblock %}

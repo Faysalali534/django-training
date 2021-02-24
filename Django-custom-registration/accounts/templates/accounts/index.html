@@ -8,8 +8,7 @@
         <a href="{% url 'logout' %}"><p style="text-align:center">Logout</p></a> <br>
         {% else %}
         <br>
-        <a href="{% url 'student_register' %}"><p style="text-align:center">Student Register</p></a>
-        <a href="{% url 'professor_register' %}"><p style="text-align:center">Professor Register</p></a>
+        <a href="{% url 'register' %}"><p style="text-align:center">Register</p></a>
         <a href="{% url 'login_request' %}"><p style="text-align:center">Login</p></a>
         {% endif %}
     </div>

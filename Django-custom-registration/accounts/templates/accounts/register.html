@@ -12,19 +12,31 @@
                   <h2>Register</h2>
                 </div>
                 <div class="card-body">
-                    <form action="{% url 'student_register' %}" method="POST" novalidate>
-                      {% csrf_token %}
-                         {% for field in form.visible_fields %}
-                           <div class="form-group">
-                               {{ field.label_tag }}
-                                  {% render_field field class="form-control" %}
-                                    {% for error in field.errors %}
-                                      <span style="color:red">{{ error }}</span>
-                                    {% endfor %}
-                         {% endfor %}
-                             <input type="submit" value="Register" class="btn btn-block btn-primary">
-                           </div>
-                    </form>
+                    {% if registered %}
+                        <h1>Thank you for registering</h1>
+                    {% else %}
+                        <form action="{% url 'register' %}" method="POST" novalidate>
+                          {% csrf_token %}
+                            <div class="form-group">
+                             {% for field in user_form.visible_fields %}
+                                   {{ field.label_tag }}
+                                      {% render_field field class="form-control" %}
+                                        {% for error in field.errors %}
+                                          <span style="color:red">{{ error }}</span>
+                                        {% endfor %}
+                             {% endfor %}
+                              {% for field in profile_form.visible_fields %}
+                                   {{ field.label_tag }}
+                                      {% render_field field class="form-control" %}
+                                        {% for error in field.errors %}
+                                          <span style="color:red">{{ error }}</span>
+                                        {% endfor %}
+                             {% endfor %}
+                                <br>
+                                 <input type="submit" value="Register" class="btn btn-block btn-primary">
+                               </div>
+                        </form>
+                    {% endif %}
                  </div>
                     </div>
                 </div>
@@ -33,3 +45,13 @@
         </div>
       </section>
 {% endblock %}
+
+
+
+
+
+
+
+
+
+
