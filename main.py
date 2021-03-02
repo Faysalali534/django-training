@@ -29,6 +29,6 @@ if __name__ == '__main__':
     csv_reading.store_results_of_second_argument()
     csv_reading.store_results_of_third_argument()
 
-    print(json.dumps(result_dictionary, indent=4, ensure_ascii=False))
+    print(json.dumps(csv_reading.result_dictionary, indent=4, ensure_ascii=False))
 
     csv_reading.close_file()
